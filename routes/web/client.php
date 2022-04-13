@@ -15,3 +15,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', 'LoginController@show')->name('login');
 Route::post('/', 'LoginController@login');
+Route::get('/dashboard', function () {
+    return 'dashboard';
+})->name('dashboard');
