@@ -13,6 +13,5 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return 'client route test';
-});
+Route::get('/', 'LoginController@show')->name('login');
+Route::post('/', 'LoginController@login');
