@@ -18,3 +18,5 @@ Route::post('/', 'LoginController@login');
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->name('dashboard');
+
+Route::resource('posts', 'PostController')->except('show');
