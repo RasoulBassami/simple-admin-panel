@@ -42,7 +42,7 @@
                 </div>
                 <!-- /.card-body -->
                 <div class="card-footer">
-                    <button type="submit" class="btn btn-info">ایجاد پست جدید</button>
+                    <button type="submit" class="btn btn-info">اعمال تغییرات</button>
                     <a href="{{ route('posts.index') }}" class="btn btn-default float-left">لغو</a>
                 </div>
                 <!-- /.card-footer -->

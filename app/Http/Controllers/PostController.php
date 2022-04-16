@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\PaginationHelper;
+use App\Http\Requests\PostRequest;
 use App\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Validation\Rule;
 
 class PostController extends Controller
 {
@@ -71,6 +73,8 @@ class PostController extends Controller
 
         auth()->user()->posts()->create($data);
 
+        alert()->success('پست موردنظر با موفقیت ایجاد شد.', 'تبریک')->persistent('بسیار خب');
+
         return redirect(route('posts.index'));
     }
 
@@ -90,12 +94,23 @@ class PostController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Post $post)
     {
-        //
+
+        $data = $request->validate([
+            'title' => ['required', 'string', 'max:255', Rule::unique('posts')->ignore($post->id)],
+            'description' => ['required','string', 'min:3', 'max:1000'],
+            'body' => ['required', 'string', 'min:3'],
+        ]);
+
+        $data['is_active'] = $request->has('active') ? 1 : 0;
+
+        $post->update($data);
+
+        alert()->success('پست موردنظر با موفقیت ویرایش شد.', 'تبریک')->persistent('بسیار خب');
+
+        return redirect(route('posts.index'));
     }
 
     /**
