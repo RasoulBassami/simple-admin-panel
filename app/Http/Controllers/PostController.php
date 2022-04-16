@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\PaginationHelper;
-use App\Http\Requests\PostRequest;
+use App\Http\Requests\StorePostRequest;
+use App\Http\Requests\UpdatePostRequest;
 use App\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -57,19 +58,13 @@ class PostController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      */
-    public function store(Request $request)
+    public function store(StorePostRequest $request)
     {
-        $data = $request->validate([
-            'title' => ['required', 'string', 'max:255', 'unique:posts'],
-            'description' => ['required','string', 'min:3', 'max:1000'],
-            'body' => ['required', 'string', 'min:3'],
-        ]);
-
         if ($request->has('active')) {
-            $data['is_active'] = 1;
+            $request['is_active'] = 1;
         }
 
-        auth()->user()->posts()->create($data);
+        auth()->user()->posts()->create($request->all());
 
         alert()->success('پست موردنظر با موفقیت ایجاد شد.', 'تبریک')->persistent('بسیار خب');
 
@@ -93,18 +88,11 @@ class PostController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      */
-    public function update(Request $request, Post $post)
+    public function update(UpdatePostRequest $request, Post $post)
     {
+        $request['is_active'] = $request->has('active') ? 1 : 0;
 
-        $data = $request->validate([
-            'title' => ['required', 'string', 'max:255', Rule::unique('posts')->ignore($post->id)],
-            'description' => ['required','string', 'min:3', 'max:1000'],
-            'body' => ['required', 'string', 'min:3'],
-        ]);
-
-        $data['is_active'] = $request->has('active') ? 1 : 0;
-
-        $post->update($data);
+        $post->update($request->all());
 
         alert()->success('پست موردنظر با موفقیت ویرایش شد.', 'تبریک')->persistent('بسیار خب');
 
