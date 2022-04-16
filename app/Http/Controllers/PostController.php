@@ -76,21 +76,14 @@ class PostController extends Controller
 
     /**
      * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Post $post)
     {
         if(Gate::denies('update-post', $post)) {
-            return view('home')->withErrors('You cannot do that');
-        } else {
-            return view('post/edit')->with('post', $post);
+            return view('/dashboard')->withErrors('شما به این بخش دسترسی ندارید!');
         }
-//        @can('update-post', $post)
-//        <a href="{{ action('PostsController@edit', [$post->id]) }}">Edit</a>
-//    @endcan
 
+        return view('posts.edit', compact('post'));
     }
 
     /**

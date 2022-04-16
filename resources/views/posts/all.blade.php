@@ -51,7 +51,9 @@
                                         @method('delete')
                                         <button type="submit" class="btn btn-danger btn-sm">حذف</button>
                                     </form>
-                                    <a class="btn btn-primary btn-sm mr-1" href="{{ route('posts.edit', ['post' => $post->id])}}">ویرایش</a>
+                                    @can('update-post', $post)
+                                        <a class="btn btn-primary btn-sm mr-1" href="{{ route('posts.edit', ['post' => $post->id])}}">ویرایش</a>
+                                    @endcan
                                 </td>
                             </tr>
                         @endforeach
