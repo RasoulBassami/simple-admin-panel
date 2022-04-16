@@ -18,9 +18,9 @@ class CreatePostsTable extends Migration
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('user')->onDelete('cascade');
             $table->string('title')->unique();
-            $table->mediumText('description')->nullable();
-            $table->text('body')->nullable();
-            $table->boolean('is_active')->default(1);
+            $table->mediumText('description');
+            $table->text('body');
+            $table->boolean('is_active')->default(0);
             $table->softDeletes();
             $table->timestamps();
         });

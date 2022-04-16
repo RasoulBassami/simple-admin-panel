@@ -33,7 +33,7 @@
                     <div class="form-group">
                         <div class="col-sm-offset-2">
                             <div class="form-check">
-                                <input type="checkbox" name="is-active" class="form-check-input" id="exampleCheck2">
+                                <input type="checkbox" name="active" class="form-check-input" id="exampleCheck2">
                                 <label class="form-check-label" for="exampleCheck2">پست فعال باشد</label>
                             </div>
                         </div>

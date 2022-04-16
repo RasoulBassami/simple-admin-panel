@@ -56,11 +56,22 @@ class PostController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->validate([
+            'title' => ['required', 'string', 'max:255', 'unique:posts'],
+            'description' => ['required','string', 'min:3', 'max:1000'],
+            'body' => ['required', 'string', 'min:3'],
+        ]);
+
+        if ($request->has('active')) {
+            $data['is_active'] = 1;
+        }
+
+        auth()->user()->posts()->create($data);
+
+        return redirect(route('posts.index'));
     }
 
     /**
