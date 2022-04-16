@@ -19,7 +19,7 @@
                                 </div>
                             </div>
                         </form>
-                        @can('create-post')
+                        @can('create', \App\Post::class)
                             <a class="btn btn-sm btn-primary mr-2" href="{{ route('posts.create') }}">ایجاد پست جدید</a>
                         @endcan
                         <a class="btn btn-sm btn-dark mr-2" href="{{ request()->fullUrlWithQuery(['active' => 1]) }}">پست های فعال</a>
@@ -46,12 +46,14 @@
                                     @endif
                                 </td>
                                 <td class="d-flex">
-                                    <form method="post" action="{{ route('posts.destroy', ['post' => $post->id])}}">
-                                        @csrf
-                                        @method('delete')
-                                        <button type="submit" class="btn btn-danger btn-sm">حذف</button>
-                                    </form>
-                                    @can('update-post', $post)
+                                    @can('delete', $post)
+                                        <form method="post" action="{{ route('posts.destroy', ['post' => $post->id])}}">
+                                            @csrf
+                                            @method('delete')
+                                            <button type="submit" class="btn btn-danger btn-sm">حذف</button>
+                                        </form>
+                                    @endcan
+                                    @can('update', $post)
                                         <a class="btn btn-primary btn-sm mr-1" href="{{ route('posts.edit', ['post' => $post->id])}}">ویرایش</a>
                                     @endcan
                                 </td>

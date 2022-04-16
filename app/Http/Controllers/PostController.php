@@ -35,7 +35,7 @@ class PostController extends Controller
 
         $posts = $query->latest()->get();
         $filtered = $posts->filter(function ($post) {
-            if(Gate::allows('view-post', $post)){
+            if(Gate::allows('view', $post)){
                 return $post;
             }
         });
@@ -48,9 +48,7 @@ class PostController extends Controller
      */
     public function create()
     {
-        if (Gate::denies('create-post')) {
-            abort(403);
-        }
+        $this->authorize('create', Post::class);
         return view('posts.create');
     }
 
@@ -83,7 +81,7 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        if(Gate::denies('update-post', $post)) {
+        if(Gate::denies('update', $post)) {
             return view('/dashboard')->withErrors('شما به این بخش دسترسی ندارید!');
         }
 
@@ -115,12 +113,11 @@ class PostController extends Controller
 
     /**
      * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Post $post)
     {
-        //
+        $post->delete();
+        alert()->success('پست موردنظر با موفقیت حذف شد.', 'تبریک')->persistent('بسیار خب');
+        return back();
     }
 }
