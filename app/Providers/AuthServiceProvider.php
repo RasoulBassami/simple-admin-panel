@@ -28,5 +28,9 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('view-post' , function ($user, $post) {
            return !! ( $user->isAdmin() || $user->id == $post->user_id );
         });
+
+        Gate::define('create-post' , function ($user) {
+            return $user->isAdmin() ? false : true;
+        });
     }
 }

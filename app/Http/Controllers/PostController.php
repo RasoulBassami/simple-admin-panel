@@ -43,12 +43,13 @@ class PostController extends Controller
 
     /**
      * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
      */
     public function create()
     {
-        //
+        if (Gate::denies('create-post')) {
+            abort(403);
+        }
+        return view('posts.create');
     }
 
     /**

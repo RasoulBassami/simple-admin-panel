@@ -19,7 +19,9 @@
                                 </div>
                             </div>
                         </form>
-                        <a class="btn btn-sm btn-primary mr-2" href="{{ route('posts.create') }}">ایجاد پست جدید</a>
+                        @can('create-post')
+                            <a class="btn btn-sm btn-primary mr-2" href="{{ route('posts.create') }}">ایجاد پست جدید</a>
+                        @endcan
                         <a class="btn btn-sm btn-dark mr-2" href="{{ request()->fullUrlWithQuery(['active' => 1]) }}">پست های فعال</a>
                     </div>
                 </div>
