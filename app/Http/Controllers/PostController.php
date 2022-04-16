@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\PaginationHelper;
 use App\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class PostController extends Controller
 {
@@ -26,9 +28,17 @@ class PostController extends Controller
             });
         }
 
-        $posts = $query->latest()->paginate(10);
+//        $posts = $query->latest()->paginate(10);
+//        return view('posts.all', compact('posts'));
 
-        return view('posts.all',  compact('posts'));
+        $posts = $query->latest()->get();
+        $filtered = $posts->filter(function ($post) {
+            if(Gate::allows('view-post', $post)){
+                return $post;
+            }
+        });
+        $paginated = PaginationHelper::paginate($filtered, 10);
+        return view('posts.all', ['posts' => $paginated]);
     }
 
     /**
@@ -60,7 +70,15 @@ class PostController extends Controller
      */
     public function edit($id)
     {
-        //
+        if(Gate::denies('update-post', $post)) {
+            return view('home')->withErrors('You cannot do that');
+        } else {
+            return view('post/edit')->with('post', $post);
+        }
+//        @can('update-post', $post)
+//        <a href="{{ action('PostsController@edit', [$post->id]) }}">Edit</a>
+//    @endcan
+
     }
 
     /**

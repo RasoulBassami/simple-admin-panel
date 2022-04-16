@@ -30,6 +30,11 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
+    public function isAdmin()
+    {
+        return $this->is_admin ? true : false;
+    }
+
     public function posts()
     {
         return $this->hasMany(Post::class);
