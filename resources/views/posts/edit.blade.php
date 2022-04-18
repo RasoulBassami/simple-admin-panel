@@ -1,8 +1,8 @@
-@component('layout.content', ['title' => 'admin panel'])
+@component('layout.content', ['title' => 'ویرایش پست'])
 
     @slot('breadcrumb')
-        <li class="breadcrumb-item"><a href="#">خانه</a></li>
-        <li class="breadcrumb-item active">داشبورد ورژن 2</li>
+        <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">داشبورد</a></li>
+        <li class="breadcrumb-item active">ویرایش پست</li>
     @endslot
 
     <div class="row">

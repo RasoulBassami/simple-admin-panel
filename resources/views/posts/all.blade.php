@@ -1,7 +1,7 @@
-@component('layout.content', ['title' => 'all posts'])
+@component('layout.content', ['title' => 'فهرست تمامی پست های شما'])
 
     @slot('breadcrumb')
-        <li class="breadcrumb-item"><a href="#">داشبورد</a></li>
+        <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">داشبورد</a></li>
         <li class="breadcrumb-item active">همه پست ها</li>
     @endslot
     <div class="row">
@@ -22,7 +22,7 @@
                         @can('create', \App\Post::class)
                             <a class="btn btn-sm btn-primary mr-2" href="{{ route('posts.create') }}">ایجاد پست جدید</a>
                         @endcan
-                        <a class="btn btn-sm btn-dark mr-2" href="{{ request()->fullUrlWithQuery(['active' => 1]) }}">پست های فعال</a>
+                        <a class="btn btn-sm btn-success mr-2" href="{{ request()->fullUrlWithQuery(['active' => 1]) }}">پست های فعال</a>
                     </div>
                 </div>
                 <!-- /.card-header -->
@@ -31,6 +31,7 @@
                         <tbody><tr>
                             <th>آی دی</th>
                             <th>عنوان</th>
+                            <th>تاریخ ایجاد</th>
                             <th>وضعیت پست</th>
                             <th>عملیات</th>
                         </tr>
@@ -38,6 +39,7 @@
                             <tr>
                                 <td>{{ $post->id }}</td>
                                 <td>{{ $post->title }}</td>
+                                <td>{{ $post->PersianCreatedAt() }}</td>
                                 <td>
                                     @if($post->is_active)
                                         <span class="badge badge-success">فعال</span>

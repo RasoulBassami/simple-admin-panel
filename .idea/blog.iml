@@ -105,6 +105,8 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/laravel/ui" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/uxweb/sweet-alert" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/dyrynda/laravel-cascade-soft-deletes" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/hekmatinasser/verta" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/hekmatinasser/notowo" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
