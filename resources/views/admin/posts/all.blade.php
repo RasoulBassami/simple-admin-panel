@@ -1,7 +1,7 @@
-@component('layout.content', ['title' => 'فهرست تمامی پست های شما'])
+@component('admin.layout.content', ['title' => 'فهرست تمامی پست ها'])
 
     @slot('breadcrumb')
-        <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">داشبورد</a></li>
+        <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">داشبورد</a></li>
         <li class="breadcrumb-item active">همه پست ها</li>
     @endslot
     <div class="row">
@@ -19,9 +19,6 @@
                                 </div>
                             </div>
                         </form>
-                        @can('create', \App\Post::class)
-                            <a class="btn btn-sm btn-primary mr-2" href="{{ route('posts.create') }}">ایجاد پست جدید</a>
-                        @endcan
                         <a class="btn btn-sm btn-success mr-2" href="{{ request()->fullUrlWithQuery(['active' => 1]) }}">پست های فعال</a>
                     </div>
                 </div>
@@ -30,14 +27,15 @@
                     <table class="table table-hover">
                         <tbody><tr>
                             <th>آی دی</th>
+                            <th>نویسنده</th>
                             <th>عنوان</th>
                             <th>تاریخ ایجاد</th>
                             <th>وضعیت پست</th>
-                            <th>عملیات</th>
                         </tr>
                         @foreach($posts as $post)
                             <tr>
                                 <td>{{ $post->id }}</td>
+                                <td>{{ $post->user->name }}</td>
                                 <td>{{ $post->title }}</td>
                                 <td>{{ $post->PersianCreatedAt() }}</td>
                                 <td>
@@ -46,21 +44,6 @@
                                     @else
                                         <span class="badge bg-danger">غیرفعال</span>
                                     @endif
-                                </td>
-                                <td class="d-flex">
-                                    @can('delete', $post)
-                                        <form method="post" action="{{ route('posts.destroy', ['post' => $post->id])}}">
-                                            @csrf
-                                            @method('delete')
-                                            <button type="submit" class="btn btn-danger btn-sm">حذف</button>
-                                        </form>
-                                    @endcan
-                                    @can('update', $post)
-                                        <a class="btn btn-primary btn-sm mr-1" href="{{ route('posts.edit', ['post' => $post->id])}}">ویرایش</a>
-                                    @endcan
-                                    @can('create', \App\Post::class)
-                                        <a class="btn btn-warning btn-sm mr-1" href="{{ route('posts.images.index', ['post' => $post->id])}}">گالری تصاویر</a>
-                                    @endcan
                                 </td>
                             </tr>
                         @endforeach

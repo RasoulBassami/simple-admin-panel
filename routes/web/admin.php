@@ -15,5 +15,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/dashboard', function () {
-    return 'admin route test';
+    return view('admin.dashboard');
 })->name('dashboard')->middleware(['auth', 'adminCheck']);
+
+Route::get('posts', 'PostController@index')->name('posts.index')->middleware(['auth', 'adminCheck']);
