@@ -15,9 +15,11 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', 'LoginController@show')->name('login');
 Route::post('/', 'LoginController@login');
+Route::get('/logout', 'LoginController@logout')->name('logout');
+
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->name('dashboard');
 
-Route::resource('posts', 'PostController')->except('show');
+Route::resource('posts', 'PostController')->except('show')->middleware('auth');
 Route::resource('posts.images', 'ImageController')->except('show')->middleware('can:view,post');
