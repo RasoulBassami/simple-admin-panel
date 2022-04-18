@@ -20,3 +20,4 @@ Route::get('/dashboard', function () {
 })->name('dashboard');
 
 Route::resource('posts', 'PostController')->except('show');
+Route::resource('posts.images', 'ImageController')->except('show')->middleware('can:view,post');

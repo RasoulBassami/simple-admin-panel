@@ -612,6 +612,33 @@ __webpack_require__(/*! ./admin/demo */ "./resources/js/admin/demo.js");
 
 __webpack_require__(/*! sweetalert */ "./node_modules/sweetalert/dist/sweetalert.min.js");
 
+var createNewPic = function createNewPic(_ref) {
+  var id = _ref.id;
+  return "\n                    <div class=\"row image-field\" id=\"image-".concat(id, "\">\n                        <div class=\"col-5\">\n                            <div class=\"form-group\">\n                            <label>\u062A\u0635\u0648\u06CC\u0631</label>\n                                 <div class=\"custom-file\">\n                                      <input type=\"file\" class=\"custom-file-input\" name=\"images[").concat(id, "][image]\"\n                                      id=\"customFile").concat(id, "\" aria-describedby=\"customFileAddon\" lang=\"fa\">\n                                      <label class=\"custom-file-label\" for=\"customFile").concat(id, "\">\u0627\u0646\u062A\u062E\u0627\u0628</label>\n                                </div>\n                            </div>\n                        </div>\n                        <div class=\"col-5\">\n                            <div class=\"form-group\">\n                                 <label>\u0639\u0646\u0648\u0627\u0646 \u062A\u0635\u0648\u06CC\u0631</label>\n                                 <input type=\"text\" name=\"images[").concat(id, "][alt]\" class=\"form-control\">\n                            </div>\n                        </div>\n                         <div class=\"col-2\">\n                            <label >\u0627\u0642\u062F\u0627\u0645\u0627\u062A</label>\n                            <div>\n                                <button type=\"button\" class=\"btn btn-sm btn-warning\" onclick=\"document.getElementById('image-").concat(id, "').remove()\">\u062D\u0630\u0641</button>\n                            </div>\n                        </div>\n                    </div>\n                ");
+};
+
+$('#add_post_image').click(function () {
+  var imagesSection = $('#images_section');
+  var id = imagesSection.children().length;
+  imagesSection.append(createNewPic({
+    id: id
+  }));
+});
+/*  ==========================================
+    SHOW UPLOADED IMAGE NAME
+    * ========================================== */
+
+var input = document.getElementById('upload');
+var infoArea = document.getElementById('upload-label');
+console.log(input);
+input.addEventListener('change', showFileName);
+
+function showFileName(event) {
+  var input = event.srcElement;
+  var fileName = input.files[0].name;
+  infoArea.textContent = fileName;
+}
+
 /***/ }),
 
 /***/ "./resources/js/admin/adminlte.js":

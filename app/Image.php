@@ -2,13 +2,12 @@
 
 namespace App;
 
-use Iatstuti\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Image extends Model
 {
-    use SoftDeletes, CascadeSoftDeletes;
+    use SoftDeletes;
 
     protected $fillable = [
         'image', 'alt'
