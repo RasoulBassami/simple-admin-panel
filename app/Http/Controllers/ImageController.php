@@ -2,15 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreImageRequest;
+use App\Http\Requests\UpdateImageRequest;
 use App\Image;
 use App\Post;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Gate;
 
 class ImageController extends Controller
 {
-
     /**
      * Display a listing of the resource.
      */
@@ -30,16 +29,9 @@ class ImageController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
      */
-    public function store(Post $post, Request $request)
+    public function store(Post $post, StoreImageRequest $request)
     {
-        $data = $request->validate([
-            'images.*.image' => ['required', 'mimes:jpg,png,jpeg', 'max:2048'],
-            'images.*.alt' => ['required', 'string', 'min:3', 'max:255'],
-        ]);
-
         $destination_path = '/images/posts/' . $post->id . '/';
         foreach ($request->file('images') as $file) {
             $upload_path = $destination_path . $file['image']->getClientOriginalName();
@@ -67,16 +59,9 @@ class ImageController extends Controller
 
     /**
      * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
      */
-    public function update(Request $request, Post $post, Image $image)
+    public function update(UpdateImageRequest $request, Post $post, Image $image)
     {
-        $request->validate([
-            'image' => ['mimes:jpg,png,jpeg', 'max:2048'],
-            'alt' => ['required', 'string', 'min:3', 'max:255'],
-        ]);
-
         $data['alt'] = $request['alt'];
 
         if($request->file('image')){

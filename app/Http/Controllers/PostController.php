@@ -6,7 +6,6 @@ use App\Helpers\PaginationHelper;
 use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdatePostRequest;
 use App\Post;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 
 class PostController extends Controller
@@ -29,9 +28,6 @@ class PostController extends Controller
                 $q->where('is_active', 1);
             });
         }
-
-//        $posts = $query->latest()->paginate(10);
-//        return view('posts.all', compact('posts'));
 
         $posts = $query->latest()->get();
         $filtered = $posts->filter(function ($post) {
@@ -66,7 +62,6 @@ class PostController extends Controller
         auth()->user()->posts()->create($request->all());
 
         alert()->success('پست موردنظر با موفقیت ایجاد شد.', 'تبریک')->persistent('بسیار خب');
-
         return redirect(route('posts.index'));
     }
 
@@ -84,8 +79,6 @@ class PostController extends Controller
 
     /**
      * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
      */
     public function update(UpdatePostRequest $request, Post $post)
     {
@@ -94,7 +87,6 @@ class PostController extends Controller
         $post->update($request->all());
 
         alert()->success('پست موردنظر با موفقیت ویرایش شد.', 'تبریک')->persistent('بسیار خب');
-
         return redirect(route('posts.index'));
     }
 

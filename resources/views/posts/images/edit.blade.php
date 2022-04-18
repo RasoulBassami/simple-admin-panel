@@ -45,7 +45,7 @@
                                 </div>
                                 <div class="col-5">
                                     <div class="form-group">
-                                        <label>عنوان تصویر</label>
+                                        <label>متن جایگزین تصویر</label>
                                         <input type="text" name="alt" class="form-control" value="{{ old('alt' , $image->alt) }}">
                                     </div>
                                 </div>

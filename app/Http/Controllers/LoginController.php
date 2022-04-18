@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\User;
+use App\Http\Requests\UserRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -17,25 +17,13 @@ class LoginController extends Controller
         return view('login');
     }
 
-    public function login(Request $request)
+    public function login(UserRequest $request)
     {
-        $input = $request->validate([
-           'username' => ['required', 'string', 'exists:users,username'],
-           'password' => ['required', 'string']
-        ]);
-
-        $credentials = array(
-            'username' => $input['username'],
-            'password' => $input['password']
-        );
-        $remember = $request->has('remember');
-
-        if (Auth::attempt($credentials, $remember)) {
+        if ($this->attemptToLogin($request)) {
             $request->session()->regenerate();
             return redirect($this->redirectPath());
         }
-
-        return redirect(route('login'))->with('error','Username And Password Are Wrong.');
+        return redirect(route('login'))->with('error','نام کاربری یا رمز عبور اشتباه است');
     }
 
     public function logout(Request $request)
@@ -48,9 +36,18 @@ class LoginController extends Controller
         return redirect('/');
     }
 
+    public function attemptToLogin($request)
+    {
+        $credentials = array(
+            'username' => $request['username'],
+            'password' => $request['password']
+        );
+        $remember = $request->has('remember');
+        return Auth::attempt($credentials, $remember);
+    }
+
     public function redirectPath()
     {
-
         if (auth()->user()->isAdmin()) {
             return route('admin.dashboard');
         }
