@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateImageRequest;
 use App\Image;
 use App\Post;
 use App\Repositories\ImageRepositoryInterface;
+use App\Utilities\ImageUploader;
 use Illuminate\Support\Facades\File;
 
 class ImageController extends Controller
@@ -41,11 +42,8 @@ class ImageController extends Controller
     public function store(Post $post, StoreImageRequest $request)
     {
         $destination_path = '/images/posts/' . $post->id . '/';
-        foreach ($request->file('images') as $file) {
-            $upload_path = $destination_path . $file['image']->getClientOriginalName();
-            $path = $file['image']->store($upload_path, ['disk' => 'public']);
-            $images_paths[] = $path;
-        }
+
+        $images_paths = ImageUploader::uploadMany($destination_path, $request->file('images'));
 
         for ($i = 0; $i < sizeof($images_paths); $i++) {
             $this->imageRepository->store($post, [
@@ -73,15 +71,9 @@ class ImageController extends Controller
         $data['alt'] = $request['alt'];
 
         if($request->file('image')){
-            if(File::exists(public_path($image->image))){
-                File::delete(public_path($image->image));
-            }
 
             $destination_path = '/images/posts/' . $post->id . '/';
-            $upload_path = $destination_path . $request->file('image')->getClientOriginalName();
-            $path = $request->file('image')->store($upload_path, ['disk' => 'public']);
-
-            $data['image'] = $path;
+            $data['image'] = ImageUploader::update($destination_path, $image, $request->file('image'));
         }
 
         $this->imageRepository->update($image, $data);
@@ -96,9 +88,8 @@ class ImageController extends Controller
      */
     public function destroy(Post $post, Image $image)
     {
-        if(File::exists(public_path($image->image))){
-            File::delete(public_path($image->image));
-        }
+        ImageUploader::delete($image);
+
         $this->imageRepository->delete($image);
         $images = $this->imageRepository->postImages($post);
         return view('posts.images.all', ['post' => $post, 'images' => $images]);
