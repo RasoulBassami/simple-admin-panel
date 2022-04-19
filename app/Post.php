@@ -27,4 +27,15 @@ class Post extends Model
     {
         return $this->hasMany(Image::class);
     }
+
+    public function format()
+    {
+        return [
+            'id' => $this->id,
+            'title' => $this->title,
+            'author' => $this->user->name,
+            'created_at' => $this->PersianCreatedAt(),
+            'status' => $this->is_active,
+        ];
+    }
 }

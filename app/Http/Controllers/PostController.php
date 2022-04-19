@@ -6,35 +6,26 @@ use App\Helpers\PaginationHelper;
 use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdatePostRequest;
 use App\Post;
+use App\Repositories\PostRepositoryInterface;
 use Illuminate\Support\Facades\Gate;
 
 class PostController extends Controller
 {
+    protected $postRepository;
+    public function __construct(PostRepositoryInterface $postRepository)
+    {
+        $this->postRepository = $postRepository;
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $query = Post::query();
+        $posts = $this->postRepository->getAllPostsWithQueryString();
 
-        if ($keyword = request('search')) {
-            $query = $query->where(function ($q) use ($keyword){
-                $q->where('title', 'LIKE', "%{$keyword}%")
-                    ->orWhere('id', 'LIKE', "%{$keyword}%");
-            });
-        }
-        if (request('active')) {
-            $query = $query->where(function ($q){
-                $q->where('is_active', 1);
-            });
-        }
+        $filtered = $this->postRepository->filterThroughTheGate('view', $posts);
 
-        $posts = $query->latest()->get();
-        $filtered = $posts->filter(function ($post) {
-            if(Gate::allows('view', $post)){
-                return $post;
-            }
-        });
         $paginated = PaginationHelper::paginate($filtered, 10);
         return view('posts.all', ['posts' => $paginated]);
     }
@@ -59,7 +50,7 @@ class PostController extends Controller
             $request['is_active'] = 1;
         }
 
-        auth()->user()->posts()->create($request->all());
+        $this->postRepository->create($request->all());
 
         alert()->success('پست موردنظر با موفقیت ایجاد شد.', 'تبریک')->persistent('بسیار خب');
         return redirect(route('posts.index'));
@@ -71,7 +62,7 @@ class PostController extends Controller
     public function edit(Post $post)
     {
         if(Gate::denies('update', $post)) {
-            return view('/dashboard')->withErrors('شما به این بخش دسترسی ندارید!');
+            return view('dashboard')->withErrors('شما به این بخش دسترسی ندارید!');
         }
 
         return view('posts.edit', compact('post'));
@@ -84,7 +75,7 @@ class PostController extends Controller
     {
         $request['is_active'] = $request->has('active') ? 1 : 0;
 
-        $post->update($request->all());
+        $this->postRepository->update($post, $request->all());
 
         alert()->success('پست موردنظر با موفقیت ویرایش شد.', 'تبریک')->persistent('بسیار خب');
         return redirect(route('posts.index'));
@@ -95,7 +86,8 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        $post->delete();
+
+        $this->postRepository->delete($post);
         alert()->success('پست موردنظر با موفقیت حذف شد.', 'تبریک')->persistent('بسیار خب');
         return back();
     }
