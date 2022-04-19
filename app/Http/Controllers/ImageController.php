@@ -6,16 +6,24 @@ use App\Http\Requests\StoreImageRequest;
 use App\Http\Requests\UpdateImageRequest;
 use App\Image;
 use App\Post;
+use App\Repositories\ImageRepositoryInterface;
 use Illuminate\Support\Facades\File;
 
 class ImageController extends Controller
 {
+    protected $imageRepository;
+    public function __construct(ImageRepositoryInterface $imageRepository)
+    {
+        $this->imageRepository = $imageRepository;
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index(Post $post)
     {
-        $images = $post->images()->latest()->paginate(20);
+        $images = $this->imageRepository->postImages($post);
+
         return view('posts.images.all', ['post' => $post, 'images' => $images]);
     }
 
@@ -40,7 +48,7 @@ class ImageController extends Controller
         }
 
         for ($i = 0; $i < sizeof($images_paths); $i++) {
-            $post->images()->create([
+            $this->imageRepository->store($post, [
                 'image' => $images_paths[$i],
                 'alt' => $request->images[$i]['alt']
             ]);
@@ -76,9 +84,10 @@ class ImageController extends Controller
             $data['image'] = $path;
         }
 
-        $image->update($data);
+        $this->imageRepository->update($image, $data);
 
-        $images = $post->images()->latest()->paginate(20);
+        $images = $this->imageRepository->postImages($post);
+
         return view('posts.images.all', compact('post', 'images'));
     }
 
@@ -90,8 +99,8 @@ class ImageController extends Controller
         if(File::exists(public_path($image->image))){
             File::delete(public_path($image->image));
         }
-        $image->forceDelete();
-        $images = $post->images()->latest()->paginate(20);
+        $this->imageRepository->delete($image);
+        $images = $this->imageRepository->postImages($post);
         return view('posts.images.all', ['post' => $post, 'images' => $images]);
     }
 }
