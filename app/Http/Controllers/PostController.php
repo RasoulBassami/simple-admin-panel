@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Helpers\PaginationHelper;
 use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdatePostRequest;
 use App\Post;
@@ -26,7 +25,8 @@ class PostController extends Controller
 
         $filtered = $this->postRepository->filterThroughTheGate('view', $posts);
 
-        $paginated = PaginationHelper::paginate($filtered, 10);
+        $paginated = $this->postRepository->paginatePosts($filtered);
+
         return view('posts.all', ['posts' => $paginated]);
     }
 
@@ -86,7 +86,6 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-
         $this->postRepository->delete($post);
         alert()->success('پست موردنظر با موفقیت حذف شد.', 'تبریک')->persistent('بسیار خب');
         return back();

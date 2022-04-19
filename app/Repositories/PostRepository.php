@@ -1,5 +1,6 @@
 <?php
 namespace App\Repositories;
+use App\Helpers\PaginationHelper;
 use \App\Post;
 use Illuminate\Support\Facades\Gate;
 
@@ -41,6 +42,11 @@ class PostRepository implements PostRepositoryInterface
                 return $post;
             }
         });
+    }
+
+    public function paginatePosts($posts, $perPage = 10)
+    {
+        return PaginationHelper::paginate($posts, $perPage);
     }
 
     public function create($data)

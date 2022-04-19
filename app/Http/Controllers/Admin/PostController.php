@@ -2,35 +2,26 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Helpers\PaginationHelper;
 use App\Http\Controllers\Controller;
-use App\Post;
-use Illuminate\Support\Facades\Gate;
+use App\Repositories\PostRepositoryInterface;
 
 class PostController extends Controller
 {
+    protected $postRepository;
+    public function __construct(PostRepositoryInterface $postRepository)
+    {
+        $this->postRepository = $postRepository;
+    }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $query = Post::query();
+        $posts = $this->postRepository->getAllPostsWithQueryString();
 
-        if ($keyword = request('search')) {
-            $query = $query->where(function ($q) use ($keyword){
-                $q->where('title', 'LIKE', "%{$keyword}%")
-                    ->orWhere('id', 'LIKE', "%{$keyword}%");
-            });
-        }
-        if (request('active')) {
-            $query = $query->where(function ($q){
-                $q->where('is_active', 1);
-            });
-        }
+        $paginated = $this->postRepository->paginatePosts($posts);
 
-        $posts = $query->latest()->paginate(10);
-
-        return view('admin.posts.all', ['posts' => $posts]);
+        return view('admin.posts.all', ['posts' => $paginated]);
     }
 
 }
