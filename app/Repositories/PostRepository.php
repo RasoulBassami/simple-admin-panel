@@ -51,7 +51,14 @@ class PostRepository implements PostRepositoryInterface
 
     public function create($data)
     {
-        auth()->user()->posts()->create($data);
+        return auth()->user()->posts()->create($data);
+    }
+
+    public function saveImages($post, $images)
+    {
+        foreach ($images as $image) {
+            $post->images()->create($image);
+        }
     }
 
     public function update($post, $data)

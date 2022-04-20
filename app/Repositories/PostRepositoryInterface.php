@@ -10,6 +10,8 @@ interface PostRepositoryInterface
 
     public function create($data);
 
+    public function saveImages($post, $images);
+
     public function update($post, $data);
 
     public function delete($post);

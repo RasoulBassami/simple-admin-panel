@@ -10,11 +10,14 @@ class ImageUploader implements FileUploaderInterface
     public static function uploadMany ($destination_path, $images)
     {
         foreach ($images as $file) {
-            $upload_path = $destination_path . $file['image']->getClientOriginalName();
-            $path = $file['image']->store($upload_path, ['disk' => 'public']);
-            $images_paths[] = $path;
+            $upload_path = $destination_path . $file->getClientOriginalName();
+            $path = $file->store($upload_path, ['disk' => 'public']);
+            $uploaded_images[] = [
+                'name' => $file->getClientOriginalName(),
+                'path' => $path
+            ];
         }
-        return $images_paths;
+        return $uploaded_images;
     }
 
     public static function update($destination_path, $oldImage, $newImage)

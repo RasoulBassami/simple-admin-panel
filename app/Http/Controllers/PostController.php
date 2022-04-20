@@ -6,6 +6,7 @@ use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdatePostRequest;
 use App\Post;
 use App\Repositories\PostRepositoryInterface;
+use App\Utilities\ImageUploader;
 use Illuminate\Support\Facades\Gate;
 
 class PostController extends Controller
@@ -50,7 +51,16 @@ class PostController extends Controller
             $request['is_active'] = 1;
         }
 
-        $this->postRepository->create($request->all());
+        $post = $this->postRepository->create($request->all());
+
+        if ($request->file('images')) {
+
+            $destination_path = '/images/posts/' . $post->id . '/';
+
+            $uploaded_images = ImageUploader::uploadMany($destination_path, $request->file('images'));
+
+            $this->postRepository->saveImages($post, $uploaded_images);
+        }
 
         alert()->success('پست موردنظر با موفقیت ایجاد شد.', 'تبریک')->persistent('بسیار خب');
         return redirect(route('posts.index'));

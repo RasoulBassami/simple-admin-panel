@@ -58,9 +58,6 @@
                                     @can('update', $post)
                                         <a class="btn btn-primary btn-sm mr-1" href="{{ route('posts.edit', ['post' => $post->id])}}">ویرایش</a>
                                     @endcan
-                                    @can('create', \App\Post::class)
-                                        <a class="btn btn-warning btn-sm mr-1" href="{{ route('posts.images.index', ['post' => $post->id])}}">گالری تصاویر</a>
-                                    @endcan
                                 </td>
                             </tr>
                         @endforeach

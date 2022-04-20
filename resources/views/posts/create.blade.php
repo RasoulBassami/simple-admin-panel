@@ -15,20 +15,24 @@
         @include('layout.errors')
 
         <!-- form start -->
-            <form class="form-horizontal" method="post" action="{{ route('posts.store')}}">
+            <form class="form-horizontal" method="post" action="{{ route('posts.store')}}" enctype="multipart/form-data">
                 @csrf
                 <div class="card-body">
                     <div class="form-group">
                         <label for="inputName3" class="col-sm-2 control-label">عنوان پست</label>
-                        <input type="text" name="title" class="form-control" id="inputName3" placeholder="عنوان پست را وارد کنید">
+                        <input type="text" name="title" class="form-control" id="inputName3" placeholder="عنوان پست را وارد کنید" value="{{ old('title') }}">
                     </div>
                     <div class="form-group">
                         <label for="inputEmail3" class="col-sm-2 control-label">توضیحات</label>
-                        <input type="text" name="description" class="form-control" id="inputEmail3" placeholder="توضیح مختصری در مورد این پست بنویسید">
+                        <input type="text" name="description" class="form-control" id="inputEmail3" placeholder="توضیح مختصری در مورد این پست بنویسید"  value="{{ old('description') }}">
                     </div>
                     <div class="form-group">
                         <label for="inputBody" class="col-sm-2 control-label">متن اصلی</label>
-                        <textarea name="body" class="form-control" id="inputBody" cols="20" rows="10">متن اصلی را وارد کنید</textarea>
+                        <textarea name="body" class="form-control" id="inputBody" cols="20" rows="10">{{ old('body' , 'متن اصلی را وارد کنید') }}</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputImages" class="col-sm-2 control-label">تصاویر</label>
+                        <input type="file" name="images[]" multiple class="form-control" id="inputImages" placeholder="تصاویر مدنظر خود را انتخاب کنید">
                     </div>
                     <div class="form-group">
                         <div class="col-sm-offset-2">

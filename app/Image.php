@@ -10,7 +10,7 @@ class Image extends Model
     use SoftDeletes;
 
     protected $fillable = [
-        'image', 'alt'
+        'path', 'name'
     ];
 
     public function post()
