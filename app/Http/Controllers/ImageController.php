@@ -41,17 +41,19 @@ class ImageController extends Controller
      */
     public function store(Post $post, StoreImageRequest $request)
     {
-        $destination_path = '/images/posts/' . $post->id . '/';
+        if ($request->file('images')) {
 
-        $images_paths = ImageUploader::uploadMany($destination_path, $request->file('images'));
+            $destination_path = '/images/posts/' . $post->id . '/';
 
-        for ($i = 0; $i < sizeof($images_paths); $i++) {
-            $this->imageRepository->store($post, [
-                'image' => $images_paths[$i],
-                'alt' => $request->images[$i]['alt']
-            ]);
+            $images_paths = ImageUploader::uploadMany($destination_path, $request->file('images'));
+
+            for ($i = 0; $i < sizeof($images_paths); $i++) {
+                $this->imageRepository->store($post, [
+                    'image' => $images_paths[$i],
+                    'alt' => $request->images[$i]['alt']
+                ]);
+            }
         }
-
         return redirect(route('posts.images.index', ['post' => $post->id]));
     }
 
@@ -70,8 +72,7 @@ class ImageController extends Controller
     {
         $data['alt'] = $request['alt'];
 
-        if($request->file('image')){
-
+        if($request->file('image')) {
             $destination_path = '/images/posts/' . $post->id . '/';
             $data['image'] = ImageUploader::update($destination_path, $image, $request->file('image'));
         }
