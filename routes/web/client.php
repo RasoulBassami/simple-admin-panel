@@ -22,4 +22,6 @@ Route::get('/dashboard', function () {
 })->name('dashboard')->middleware(['auth', 'userCheck']);
 
 Route::resource('posts', 'PostController')->except('show')->middleware(['auth', 'userCheck']);
-Route::resource('posts.images', 'ImageController')->except('show')->middleware(['auth', 'userCheck', 'can:view,post']);
+//Route::resource('posts.images', 'ImageController')->except('show')->middleware(['auth', 'userCheck', 'can:view,post']);
+
+Route::delete('posts/{post}/images/{image}', 'ImageController@destroy')->name('post.image.delete')->middleware(['auth', 'userCheck', 'can:view,post']);

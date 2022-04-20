@@ -93,6 +93,7 @@ class ImageController extends Controller
 
         $this->imageRepository->delete($image);
         $images = $this->imageRepository->postImages($post);
-        return view('posts.images.all', ['post' => $post, 'images' => $images]);
+//        return view('posts.images.all', ['post' => $post, 'images' => $images]);
+        return back();
     }
 }

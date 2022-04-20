@@ -5,6 +5,31 @@
         <li class="breadcrumb-item active">ویرایش پست</li>
     @endslot
 
+    @slot('scripts')
+        <script>
+            $(".delete-image").click(function(e){
+                e.preventDefault();
+                var id = $(this).data("id");
+                var token = $("meta[name='csrf-token']").attr("content");
+                var target = e.target;
+
+                $.ajax(
+                    {
+                        url: "images/"+id,
+                        type: 'DELETE',
+                        data: {
+                            "id": id,
+                            "_token": token,
+                        },
+                        complete: function () {
+                            target.closest('.col-md-3').remove();
+                        }
+                    });
+                });
+        </script>
+    @endslot
+
+
     <div class="row">
         <div class="card card-info col-md-10 offset-md-1 px-0">
             <div class="card-header">
@@ -15,7 +40,7 @@
         @include('layout.errors')
 
         <!-- form start -->
-            <form class="form-horizontal" method="post" action="{{ route('posts.update' , ['post' => $post->id])}}">
+            <form class="form-horizontal" method="post" action="{{ route('posts.update' , ['post' => $post->id])}}"  enctype="multipart/form-data">
                 @csrf
                 @method('patch')
                 <div class="card-body">
@@ -31,6 +56,30 @@
                         <label for="inputBody" class="col-sm-2 control-label">متن اصلی</label>
                         <textarea name="body" class="form-control" id="inputBody" cols="20" rows="10">{{ old('body') ?? $post->body }}</textarea>
                     </div>
+                    <div class="form-group">
+                        <label for="inputImages" class="col-sm-2 control-label">تصاویر</label>
+                        <input type="file" name="images[]" multiple class="form-control" id="inputImages" placeholder="تصاویر مدنظر خود را انتخاب کنید">
+                        <hr>
+                        <div class="row images-box">
+                            <div class="row col-12 mb-2">
+                                <span class="px-2">تصاویر آپلود شده</span>
+                            </div>
+                            <div class="row col-12">
+                            @forelse ($images as $image)
+                                <div class="col-md-3 col-12 px-2 mb-2">
+                                    <div class="background-images" style="background-image: url('{{ url($image->path)}}');">
+                                        <a href="#" class="delete-image" data-id="{{ $image->id }}" >حذف تصویر</a>
+
+                                    </div>
+                                </div>
+                            @empty
+                                <p> ... تصویری وجود ندارد</p>
+                            @endforelse
+                            </div>
+                        </div>
+                        <hr>
+                    </div>
+
                     <div class="form-group">
                         <div class="col-sm-offset-2">
                             <div class="form-check">

@@ -75,7 +75,8 @@ class PostController extends Controller
             return view('dashboard')->withErrors('شما به این بخش دسترسی ندارید!');
         }
 
-        return view('posts.edit', compact('post'));
+        $images = $post->images;
+        return view('posts.edit', ['post' => $post, 'images' => $images]);
     }
 
     /**
@@ -86,6 +87,15 @@ class PostController extends Controller
         $request['is_active'] = $request->has('active') ? 1 : 0;
 
         $this->postRepository->update($post, $request->all());
+
+        if ($request->file('images')) {
+
+            $destination_path = '/images/posts/' . $post->id . '/';
+
+            $uploaded_images = ImageUploader::uploadMany($destination_path, $request->file('images'));
+
+            $this->postRepository->saveImages($post, $uploaded_images);
+        }
 
         alert()->success('پست موردنظر با موفقیت ویرایش شد.', 'تبریک')->persistent('بسیار خب');
         return redirect(route('posts.index'));
