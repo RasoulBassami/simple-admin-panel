@@ -61,6 +61,10 @@ class PostRepository implements PostRepositoryInterface
 
     public function delete($post)
     {
+        $deleted_title = $post->title . '_deleted_' . $post->id;
+        $post->update([
+            'title' => $deleted_title
+        ]);
         $post->delete($post);
     }
 }
