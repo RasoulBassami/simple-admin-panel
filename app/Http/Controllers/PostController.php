@@ -88,6 +88,11 @@ class PostController extends Controller
 
         $this->postRepository->update($post, $request->all());
 
+        if ($request->deletingImages[0]){
+            $deleting_ids = explode(',', $request->deletingImages[0]);
+            $this->postRepository->removeImages($post, $deleting_ids);
+        }
+
         if ($request->file('images')) {
 
             $destination_path = '/images/posts/' . $post->id . '/';

@@ -32,6 +32,7 @@
                             <th>آی دی</th>
                             <th>عنوان</th>
                             <th>تاریخ ایجاد</th>
+                            <th>آخرین ویرایش</th>
                             <th>وضعیت پست</th>
                             <th>عملیات</th>
                         </tr>
@@ -40,6 +41,7 @@
                                 <td>{{ $post->id }}</td>
                                 <td>{{ $post->title }}</td>
                                 <td>{{ $post->PersianCreatedAt() }}</td>
+                                <td>{{ $post->PersianUpdatedAt() }}</td>
                                 <td>
                                     @if($post->is_active)
                                         <span class="badge badge-success">فعال</span>

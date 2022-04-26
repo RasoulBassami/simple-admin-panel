@@ -7,25 +7,33 @@
 
     @slot('scripts')
         <script>
+            let deletingImages = [];
             $(".delete-image").click(function(e){
                 e.preventDefault();
                 var id = $(this).data("id");
-                var token = $("meta[name='csrf-token']").attr("content");
+                deletingImages.push(id);
                 var target = e.target;
+                target.closest('.col-md-3').remove();
 
-                $.ajax(
-                    {
-                        url: "images/"+id,
-                        type: 'DELETE',
-                        data: {
-                            "id": id,
-                            "_token": token,
-                        },
-                        complete: function () {
-                            target.closest('.col-md-3').remove();
-                        }
-                    });
+                // var token = $("meta[name='csrf-token']").attr("content");
+                // $.ajax(
+                //     {
+                //         url: "images/"+id,
+                //         type: 'DELETE',
+                //         data: {
+                //             "id": id,
+                //             "_token": token,
+                //         },
+                //         complete: function () {
+                //             target.closest('.col-md-3').remove();
+                //         }
+                //     });
                 });
+            $('#edit_post').submit(function(e){
+                $('#deleting_images').val(deletingImages);
+                // console.log(deletingImages);
+                return true;
+            })
         </script>
     @endslot
 
@@ -40,7 +48,7 @@
         @include('layout.errors')
 
         <!-- form start -->
-            <form class="form-horizontal" method="post" action="{{ route('posts.update' , ['post' => $post->id])}}"  enctype="multipart/form-data">
+            <form class="form-horizontal" id="edit_post" method="post" action="{{ route('posts.update' , ['post' => $post->id])}}"  enctype="multipart/form-data">
                 @csrf
                 @method('patch')
                 <div class="card-body">
@@ -59,6 +67,7 @@
                     <div class="form-group">
                         <label for="inputImages" class="col-sm-2 control-label">تصاویر</label>
                         <input type="file" name="images[]" multiple class="form-control" id="inputImages" placeholder="تصاویر مدنظر خود را انتخاب کنید">
+                        <input type="hidden" id="deleting_images" name="deletingImages[]">
                         <hr>
                         <div class="row images-box">
                             <div class="row col-12 mb-2">

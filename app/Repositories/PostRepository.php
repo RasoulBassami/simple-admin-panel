@@ -61,6 +61,14 @@ class PostRepository implements PostRepositoryInterface
         }
     }
 
+    public function removeImages($post, $images)
+    {
+        foreach ($images as $image) {
+            $post->images()->find($image)->forceDelete($image);
+        }
+        $post->touch();
+    }
+
     public function update($post, $data)
     {
         $post->update($data);
