@@ -1,11 +1,23 @@
 <?php
-namespace App\Repositories;
+namespace App\Repositories\Eloquent;
 use App\Helpers\PaginationHelper;
 use \App\Post;
+use App\Repositories\PostRepositoryInterface;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Gate;
 
-class PostRepository implements PostRepositoryInterface
+class PostRepository extends BaseRepository implements PostRepositoryInterface
 {
+    /**
+     * UserRepository constructor.
+     *
+     * @param Post $model
+     */
+    public function __construct(Post $model)
+    {
+        parent::__construct($model);
+    }
+
     public function searchQuery($query, string $keyword)
     {
         return $query->where(function ($q) use ($keyword) {
@@ -23,7 +35,7 @@ class PostRepository implements PostRepositoryInterface
 
     public function getAllPostsWithQueryString()
     {
-        $query = Post::query();
+        $query = $this->model->query();
 
         if ($keyword = request('search')) {
             $query = $this->searchQuery($query, $keyword);

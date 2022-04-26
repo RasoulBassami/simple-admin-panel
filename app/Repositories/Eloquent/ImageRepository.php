@@ -1,11 +1,11 @@
 <?php
-namespace App\Repositories;
+namespace App\Repositories\Eloquent;
 use App\Helpers\PaginationHelper;
 use App\Image;
 use \App\Post;
-use Illuminate\Support\Facades\Gate;
+use App\Repositories\ImageRepositoryInterface;
 
-class ImageRepository implements ImageRepositoryInterface
+class ImageRepository extends BaseRepository implements ImageRepositoryInterface
 {
     public function postImages(Post $post, $perPage = 20)
     {
