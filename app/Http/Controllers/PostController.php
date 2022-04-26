@@ -75,6 +75,10 @@ class PostController extends Controller
             return view('dashboard')->withErrors('شما به این بخش دسترسی ندارید!');
         }
 
+        if(Gate::denies('update', $post)) {
+            return view('dashboard')->withErrors('شما به این بخش دسترسی ندارید!');
+        }
+
         $images = $post->images;
         return view('posts.edit', ['post' => $post, 'images' => $images]);
     }
@@ -84,6 +88,10 @@ class PostController extends Controller
      */
     public function update(UpdatePostRequest $request, Post $post)
     {
+        if(Gate::denies('update', $post)) {
+            return view('dashboard')->withErrors('شما به این بخش دسترسی ندارید!');
+        }
+
         $request['is_active'] = $request->has('active') ? 1 : 0;
 
         $this->postRepository->update($post, $request->all());
@@ -111,6 +119,10 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
+        if(Gate::denies('delete', $post)) {
+            return view('dashboard')->withErrors('شما به این بخش دسترسی ندارید!');
+        }
+
         $this->postRepository->delete($post);
         alert()->success('پست موردنظر با موفقیت حذف شد.', 'تبریک')->persistent('بسیار خب');
         return back();
