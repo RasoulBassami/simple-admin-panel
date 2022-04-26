@@ -13,24 +13,31 @@ class UsersTableSeeder extends Seeder
     {
         $cool_users = array(
             [
+                'id' => 1,
                 'name' => 'cool user',
                 'username' => 'coolUserName',
                 'password' => bcrypt('coolPassword'),
                 'is_admin' => 0
             ],
             [
+                'id' => 2,
                 'name' => 'another cool user',
                 'username' => 'anotherUserName',
                 'password' => bcrypt('anotherPassword'),
                 'is_admin' => 0
             ],
             [
+                'id' => 3,
                 'name' => 'cool admin',
                 'username' => 'adminUserName',
                 'password' => bcrypt('adminPassword'),
                 'is_admin' => 1
             ]
         );
-        DB::table('users')->insert($cool_users);
+
+        foreach ($cool_users as $user) {
+            \App\User::updateOrCreate(['id' => $user['id']], $user);
+        }
+//        DB::table('users')->insert($cool_users);
     }
 }
