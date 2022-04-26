@@ -89,11 +89,21 @@ class ImageController extends Controller
      */
     public function destroy(Post $post, Image $image)
     {
+        if (!request()->ajax()) {
+            return response()->json([
+                'status' => 'failed',
+                'message' => 'only ajax requests are acceptable!'
+            ]);
+        }
+
         ImageUploader::delete($image);
 
         $this->imageRepository->delete($image);
         $images = $this->imageRepository->postImages($post);
 //        return view('posts.images.all', ['post' => $post, 'images' => $images]);
-        return back();
+        return  response()->json([
+            'status' => 'success',
+            'message' => 'image was deleted successfully.'
+        ]);
     }
 }
