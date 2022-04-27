@@ -19,7 +19,7 @@
                                 </div>
                             </div>
                         </form>
-                        @can('create', \App\Post::class)
+                        @can('create', \App\Models\Post::class)
                             <a class="btn btn-sm btn-primary mr-2" href="{{ route('posts.create') }}">ایجاد پست جدید</a>
                         @endcan
                         <a class="btn btn-sm btn-success mr-2" href="{{ request()->fullUrlWithQuery(['active' => 1]) }}">پست های فعال</a>

@@ -36,7 +36,7 @@ class UsersTableSeeder extends Seeder
         );
 
         foreach ($cool_users as $user) {
-            \App\User::updateOrCreate(['id' => $user['id']], $user);
+            \App\Models\User::updateOrCreate(['id' => $user['id']], $user);
         }
 //        DB::table('users')->insert($cool_users);
     }

@@ -1,7 +1,7 @@
 <?php
 namespace App\Repositories\Eloquent;
-use App\Image;
-use \App\Post;
+use App\Models\Image;
+use \App\Models\Post;
 use App\Repositories\ImageRepositoryInterface;
 
 class ImageRepository extends BaseRepository implements ImageRepositoryInterface

@@ -1,7 +1,7 @@
 <?php
 namespace App\Repositories\Eloquent;
 use App\Helpers\PaginationHelper;
-use \App\Post;
+use \App\Models\Post;
 use App\Repositories\PostRepositoryInterface;
 use Illuminate\Support\Facades\Gate;
 

@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreImageRequest;
 use App\Http\Requests\UpdateImageRequest;
-use App\Image;
-use App\Post;
+use App\Models\Image;
+use App\Models\Post;
 use App\Repositories\ImageRepositoryInterface;
 use App\Utilities\ImageUploader;
 use Illuminate\Support\Facades\File;

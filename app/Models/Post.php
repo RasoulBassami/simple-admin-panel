@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use App\Traits\PersianDate;
 use Iatstuti\Database\Support\CascadeSoftDeletes;

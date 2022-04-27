@@ -2,7 +2,7 @@
 
 namespace App\Utilities;
 
-use App\Image;
+use App\Models\Image;
 use Illuminate\Support\Facades\File;
 
 class ImageUploader implements FileUploaderInterface

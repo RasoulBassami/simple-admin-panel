@@ -3,8 +3,8 @@ namespace App\Services;
 
 use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdatePostRequest;
-use App\Image;
-use App\Post;
+use App\Models\Image;
+use App\Models\Post;
 use App\Repositories\ImageRepositoryInterface;
 use App\Repositories\PostRepositoryInterface;
 use App\Utilities\ImageUploader;

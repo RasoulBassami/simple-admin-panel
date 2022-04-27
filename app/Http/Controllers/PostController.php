@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdatePostRequest;
-use App\Post;
+use App\Models\Post;
 use App\Services\PostService;
 use Illuminate\Support\Facades\Gate;
 

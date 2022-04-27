@@ -2,8 +2,8 @@
 
 namespace App\Repositories;
 
-use App\Image;
-use App\Post;
+use App\Models\Image;
+use App\Models\Post;
 
 interface ImageRepositoryInterface
 {
