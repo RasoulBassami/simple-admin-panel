@@ -3,7 +3,6 @@ namespace App\Repositories\Eloquent;
 use App\Helpers\PaginationHelper;
 use \App\Post;
 use App\Repositories\PostRepositoryInterface;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Gate;
 
 class PostRepository extends BaseRepository implements PostRepositoryInterface

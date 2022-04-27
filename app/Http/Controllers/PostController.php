@@ -5,16 +5,16 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdatePostRequest;
 use App\Post;
-use App\Repositories\PostRepositoryInterface;
-use App\Utilities\ImageUploader;
+use App\Services\PostService;
 use Illuminate\Support\Facades\Gate;
 
 class PostController extends Controller
 {
-    protected $postRepository;
-    public function __construct(PostRepositoryInterface $postRepository)
+    protected $postService;
+
+    public function __construct(PostService $postService)
     {
-        $this->postRepository = $postRepository;
+        $this->postService = $postService;
     }
 
     /**
@@ -22,11 +22,11 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = $this->postRepository->getAllPostsWithQueryString();
+        $posts = $this->postService->getAllPostsWithQueryString();
 
-        $filtered = $this->postRepository->filterThroughTheGate('view', $posts);
+        $filtered = $this->postService->filterThroughTheGate('view', $posts);
 
-        $paginated = $this->postRepository->paginatePosts($filtered);
+        $paginated = $this->postService->paginatePosts($filtered);
 
         return view('posts.all', ['posts' => $paginated]);
     }
@@ -51,16 +51,7 @@ class PostController extends Controller
             $request['is_active'] = 1;
         }
 
-        $post = $this->postRepository->create($request->all());
-
-        if ($request->file('images')) {
-
-            $destination_path = '/images/posts/' . $post->id . '/';
-
-            $uploaded_images = ImageUploader::uploadMany($destination_path, $request->file('images'));
-
-            $this->postRepository->saveImages($post, $uploaded_images);
-        }
+        $this->postService->storePost($request);
 
         alert()->success('پست موردنظر با موفقیت ایجاد شد.', 'تبریک')->persistent('بسیار خب');
         return redirect(route('posts.index'));
@@ -72,11 +63,7 @@ class PostController extends Controller
     public function edit(Post $post)
     {
         if(Gate::denies('update', $post)) {
-            return view('dashboard')->withErrors('شما به این بخش دسترسی ندارید!');
-        }
-
-        if(Gate::denies('update', $post)) {
-            return view('dashboard')->withErrors('شما به این بخش دسترسی ندارید!');
+            return view('dashboard')->withError('شما به این بخش دسترسی ندارید!');
         }
 
         $images = $post->images;
@@ -89,26 +76,12 @@ class PostController extends Controller
     public function update(UpdatePostRequest $request, Post $post)
     {
         if(Gate::denies('update', $post)) {
-            return view('dashboard')->withErrors('شما به این بخش دسترسی ندارید!');
+            return view('dashboard')->withError('شما به این بخش دسترسی ندارید!');
         }
 
         $request['is_active'] = $request->has('active') ? 1 : 0;
 
-        $this->postRepository->update($post, $request->all());
-
-        if ($request->deletingImages[0]){
-            $deleting_ids = explode(',', $request->deletingImages[0]);
-            $this->postRepository->removeImages($post, $deleting_ids);
-        }
-
-        if ($request->file('images')) {
-
-            $destination_path = '/images/posts/' . $post->id . '/';
-
-            $uploaded_images = ImageUploader::uploadMany($destination_path, $request->file('images'));
-
-            $this->postRepository->saveImages($post, $uploaded_images);
-        }
+        $this->postService->updatePost($request, $post);
 
         alert()->success('پست موردنظر با موفقیت ویرایش شد.', 'تبریک')->persistent('بسیار خب');
         return redirect(route('posts.index'));
@@ -120,10 +93,11 @@ class PostController extends Controller
     public function destroy(Post $post)
     {
         if(Gate::denies('delete', $post)) {
-            return view('dashboard')->withErrors('شما به این بخش دسترسی ندارید!');
+            return view('dashboard')->withError('شما به این بخش دسترسی ندارید!');
         }
 
-        $this->postRepository->delete($post);
+        $this->postService->removePost($post);
+
         alert()->success('پست موردنظر با موفقیت حذف شد.', 'تبریک')->persistent('بسیار خب');
         return back();
     }
