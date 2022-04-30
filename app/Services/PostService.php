@@ -1,9 +1,6 @@
 <?php
 namespace App\Services;
 
-use App\Http\Requests\StorePostRequest;
-use App\Http\Requests\UpdatePostRequest;
-use App\Models\Image;
 use App\Models\Post;
 use App\Repositories\ImageRepositoryInterface;
 use App\Repositories\PostRepositoryInterface;
@@ -36,7 +33,7 @@ class PostService
         return $this->postRepository->paginatePosts($posts);
     }
 
-    public function storePost(StorePostRequest $request)
+    public function storePost($request)
     {
         $post = $this->postRepository->create($request->all());
 
@@ -50,7 +47,7 @@ class PostService
         }
     }
 
-    public function updatePost(UpdatePostRequest $request, Post $post)
+    public function updatePost($request, Post $post)
     {
         $this->postRepository->update($post, $request->all());
 
@@ -58,9 +55,8 @@ class PostService
             $deleting_ids = explode(',', $request->deletingImages[0]);
 
             $deleting_ids = array_unique($deleting_ids);
-            $results = Image::whereIn('id', $deleting_ids )->get();
-            $results_count = Image::whereIn('id', $deleting_ids )->count();
-            if($results_count !== count($deleting_ids)){
+            $results = $this->imageRepository->whereIn($deleting_ids);
+            if($results->count() !== count($deleting_ids)){
                 throw new \Exception("All records don't exist");
             }
 

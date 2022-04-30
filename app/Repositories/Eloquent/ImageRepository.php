@@ -34,6 +34,11 @@ class ImageRepository extends BaseRepository implements ImageRepositoryInterface
         }
     }
 
+    public function whereIn($ids)
+    {
+        return $this->model->whereIn('id', $ids)->get();
+    }
+
     public function update(Image $image, $data)
     {
         $image->update($data);
