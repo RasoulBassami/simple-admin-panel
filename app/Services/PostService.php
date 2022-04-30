@@ -58,12 +58,14 @@ class PostService
             $deleting_ids = explode(',', $request->deletingImages[0]);
 
             $deleting_ids = array_unique($deleting_ids);
-            $results = Image::whereIn('id', $deleting_ids )->count();
-            if($results !== count($deleting_ids)){
+            $results = Image::whereIn('id', $deleting_ids )->get();
+            $results_count = Image::whereIn('id', $deleting_ids )->count();
+            if($results_count !== count($deleting_ids)){
                 throw new \Exception("All records don't exist");
             }
 
             $this->imageRepository->removeImages($post, $deleting_ids);
+            ImageUploader::deleteMany($results);
         }
 
         if ($request->file('images')) {

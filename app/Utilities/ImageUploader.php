@@ -29,8 +29,16 @@ class ImageUploader implements FileUploaderInterface
 
     public static function delete($image)
     {
-        if(File::exists(public_path($image->image))) {
-            File::delete(public_path($image->image));
+
+        if(File::exists(public_path($image->path))) {
+            File::delete(public_path($image->path));
+        }
+    }
+
+    public static function deleteMany($images)
+    {
+        foreach ($images as $image) {
+            self::delete($image);
         }
     }
 }
