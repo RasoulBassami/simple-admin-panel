@@ -30,7 +30,9 @@
                             <th>نویسنده</th>
                             <th>عنوان</th>
                             <th>تاریخ ایجاد</th>
+                            <th>آخرین ویرایش</th>
                             <th>وضعیت پست</th>
+                            <th>عملیات</th>
                         </tr>
                         @foreach($posts as $post)
                             <tr>
@@ -38,12 +40,25 @@
                                 <td>{{ $post->user->name }}</td>
                                 <td>{{ $post->title }}</td>
                                 <td>{{ $post->PersianCreatedAt() }}</td>
+                                <td>{{ $post->PersianUpdatedAt() }}</td>
                                 <td>
                                     @if($post->is_active)
                                         <span class="badge badge-success">فعال</span>
                                     @else
                                         <span class="badge bg-danger">غیرفعال</span>
                                     @endif
+                                </td>
+                                <td class="d-flex">
+                                    @can('delete', $post)
+                                        <form method="post" action="{{ route('admin.posts.destroy', ['post' => $post->id])}}">
+                                            @csrf
+                                            @method('delete')
+                                            <button type="submit" class="btn btn-danger btn-sm">حذف</button>
+                                        </form>
+                                    @endcan
+                                    @can('update', $post)
+                                        <a class="btn btn-primary btn-sm mr-1" href="{{ route('admin.posts.edit', ['post' => $post->id])}}">ویرایش</a>
+                                    @endcan
                                 </td>
                             </tr>
                         @endforeach

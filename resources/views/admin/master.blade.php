@@ -90,6 +90,7 @@
 <!-- AdminLTE App -->
 
 <script src="{{ asset('js/admin.js') }}"></script>
+@yield('scripts')
 @include('sweet::alert')
 </body>
 </html>

@@ -13,11 +13,17 @@
             <!-- /.card-header -->
             <div class="card-body">
                 <div class="row col-md-8 offset-2">
-                    <div class="col-6 offset-3">
+                    <div class="col-6">
                         <a href="{{ route('admin.posts.index') }}" class="btn d-block p-5 bg-success-gradient">مشاهده همه پست ها</a>
                     </div>
+                    @canany(['view', 'viewAdmin'], \App\Models\User::class)
+                        <div class="col-6">
+                            <a href="{{ route('admin.users.index') }}" class="btn d-block p-5 bg-info-gradient">مدیریت کاربران</a>
+                        </div>
+                    @endcan
                 </div>
             </div>
+
             <!-- /.card-body -->
             <div class="card-footer">
             </div>

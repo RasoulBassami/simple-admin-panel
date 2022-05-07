@@ -18,4 +18,5 @@ Route::get('/dashboard', function () {
     return view('admin.dashboard');
 })->name('dashboard')->middleware(['auth', 'adminCheck']);
 
-Route::get('posts', 'PostController@index')->name('posts.index')->middleware(['auth', 'adminCheck']);
+Route::resource('posts', 'PostController')->except(['show', 'create', 'store'])->middleware(['auth', 'adminCheck']);
+Route::resource('users', 'UserController')->except(['show'])->middleware(['auth', 'adminCheck']);

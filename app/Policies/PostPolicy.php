@@ -19,7 +19,10 @@ class PostPolicy
      */
     public function view(User $user, Post $post)
     {
-        return !!($user->isAdmin() || $user->id == $post->user_id);
+        if ($user->hasPermission('view-posts'))
+            return !!($user->isAdmin() || $user->id == $post->user_id);
+
+        return false;
     }
 
     /**
@@ -30,7 +33,10 @@ class PostPolicy
      */
     public function create(User $user)
     {
-        return $user->isAdmin() ? false : true;
+        if ($user->hasPermission('create-post'))
+            return $user->isAdmin() ? false : true;
+
+        return false;
     }
 
     /**
@@ -42,7 +48,10 @@ class PostPolicy
      */
     public function update(User $user, Post $post)
     {
-        return $user->id == $post->user_id;
+        if ($user->hasPermission('update-post'))
+            return !!($user->isAdmin() || $user->id == $post->user_id);
+
+        return false;
     }
 
     /**
@@ -54,6 +63,9 @@ class PostPolicy
      */
     public function delete(User $user, Post $post)
     {
-        return $user->id == $post->user_id;
+        if ($user->hasPermission('delete-post'))
+            return !!($user->isAdmin() || $user->id == $post->user_id);
+
+        return false;
     }
 }
