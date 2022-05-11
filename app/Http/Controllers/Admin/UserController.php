@@ -22,18 +22,24 @@ class UserController extends Controller
      */
     public function index()
     {
-        $response = Gate::inspect('view', User::class);
-        if ($response->denied()) {
-            return view('admin.dashboard')->withError($response->message());
+        $view_user = Gate::inspect('view', User::class);
+        $view_admin = Gate::inspect('viewAdmin', User::first());
+
+        if ($view_user->allowed() || $view_admin->allowed()) {
+
+            $users = $this->userService->getAllUsersWithQueryString();
+
+            $filtered = $this->userService->filterViewableUsers($users);
+//            $filtered = $this->userService->filterThroughTheGate('viewAdmin', $users);
+
+            $paginated = $this->userService->paginateUsers($filtered);
+
+            return view('admin.users.all', ['users' => $paginated]);
+
         }
 
-        $users = $this->userService->getAllUsersWithQueryString();
-
-        $filtered = $this->userService->filterThroughTheGate('viewAdmin', $users);
-
-        $paginated = $this->userService->paginateUsers($filtered);
-
-        return view('admin.users.all', ['users' => $paginated]);
+        alert()->error('شما به این بخش دسترسی ندارید.', 'خطای دسترسی')->persistent('بسیار خب');
+        return redirect('admin.dashboard');
     }
 
     /**

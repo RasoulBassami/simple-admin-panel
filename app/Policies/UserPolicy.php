@@ -105,6 +105,6 @@ class UserPolicy
      */
     public function deleteAdmin(User $user, User $model)
     {
-        return !!($user->hasPermission('update-admin-user') && $user->id != $model->id);
+        return !!($user->hasPermission('delete-admin-user') && $user->id != $model->id);
     }
 }

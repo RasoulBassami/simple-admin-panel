@@ -46,16 +46,32 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
         return $query->get();
     }
 
-    public function filterThroughTheGate(string $ability, $users)
-    {
-        return $users->filter(function ($user) use ($ability) {
+//    public function filterThroughTheGate(string $ability, $users)
+//    {
+//        return $users->filter(function ($user) use ($ability) {
+//
+//            if ($user->isAdmin()) {
+//                $response = Gate::inspect($ability, [User::class, $user]);
+//                if ($response->denied()) {
+//                    return false;
+//                }
+//            }
+//            if ($user->id == auth()->user()->id)
+//                return false;
+//
+//            return $user;
+//        });
+//    }
 
-            if ($user->isAdmin()) {
-                $response = Gate::inspect($ability, [User::class, $user]);
-                if ($response->denied()) {
-                    return false;
-                }
-            }
+    public function filterViewableUsers($users)
+    {
+        return $users->filter(function ($user) {
+
+            $ability = $user->isAdmin() ? 'viewAdmin' : 'view';
+            $response = Gate::inspect($ability, $user);
+            if ($response->denied())
+                return false;
+
             if ($user->id == auth()->user()->id)
                 return false;
 

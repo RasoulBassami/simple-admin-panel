@@ -83,7 +83,7 @@
                                     <label class="form-check-label">
                                         <input type="checkbox" name="permission[]" class="ml-1" value="{{ $permission->id }}"
                                             {{ $user->hasPermission($permission->name) ? ' checked' : '' }}
-                                            {{ !$user->isAdmin() ? ' disabled="true"' :  ' disabled="false"'}}>
+                                            {{ !$user->isAdmin() ? ' disabled' :  ''}}>
                                         {{ $permission->label }}
                                     </label>
                                 </div>
@@ -94,7 +94,7 @@
                 </div>
                 <!-- /.card-body -->
                 <div class="card-footer">
-                    <button type="submit" class="btn btn-info">ایجاد کاربر</button>
+                    <button type="submit" class="btn btn-info">ویرایش کاربر</button>
                     <a href="{{ route('admin.users.index') }}" class="btn btn-default float-left">لغو</a>
                 </div>
                 <!-- /.card-footer -->

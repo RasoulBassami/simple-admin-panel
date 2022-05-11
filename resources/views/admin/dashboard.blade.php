@@ -13,14 +13,16 @@
             <!-- /.card-header -->
             <div class="card-body">
                 <div class="row col-md-8 offset-2">
-                    <div class="col-6">
-                        <a href="{{ route('admin.posts.index') }}" class="btn d-block p-5 bg-success-gradient">مشاهده همه پست ها</a>
-                    </div>
-                    @canany(['view', 'viewAdmin'], \App\Models\User::class)
+                    @can('view', \App\Models\Post::first())
+                        <div class="col-6">
+                            <a href="{{ route('admin.posts.index') }}" class="btn d-block p-5 bg-success-gradient">مشاهده همه پست ها</a>
+                        </div>
+                    @endcan
+                    @if (auth()->user()->can('view', \App\Models\User::class) || auth()->user()->can('viewAdmin', App\Models\User::first()) )
                         <div class="col-6">
                             <a href="{{ route('admin.users.index') }}" class="btn d-block p-5 bg-info-gradient">مدیریت کاربران</a>
                         </div>
-                    @endcan
+                    @endif
                 </div>
             </div>
 

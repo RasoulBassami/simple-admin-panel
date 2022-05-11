@@ -22,6 +22,7 @@
                 <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                     <!-- Add icons to the links using the .nav-icon class
                          with font-awesome or any other icon font library -->
+                    @can('view', \App\Models\Post::first())
                     <li class="nav-item">
                         <a href="{{ route('admin.posts.index') }}" class="nav-link {{ \Illuminate\Support\Facades\Route::currentRouteName() == 'admin.posts.index' ? ' active' : ''}}">
                             <i class="nav-icon fa fa-dashboard"></i>
@@ -30,7 +31,9 @@
                             </p>
                         </a>
                     </li>
+                    @endcan
 
+                    @if (auth()->user()->can('view', \App\Models\User::class) || auth()->user()->can('viewAdmin', App\Models\User::first()) )
                     <li class="nav-item">
                         <a href="{{ route('admin.users.index') }}" class="nav-link">
                             <i class="nav-icon fa fa-users"></i>
@@ -39,6 +42,7 @@
                             </p>
                         </a>
                     </li>
+                    @endif
 
                 </ul>
             </nav>

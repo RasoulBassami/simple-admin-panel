@@ -22,9 +22,14 @@ class UserService
         return $this->userRepository->getAllUsersWithQueryString();
     }
 
-    public function filterThroughTheGate(string $ability, $users)
+//    public function filterThroughTheGate(string $ability, $users)
+//    {
+//        return $this->userRepository->filterThroughTheGate($ability, $users);
+//    }
+
+    public function filterViewableUsers($users)
     {
-        return $this->userRepository->filterThroughTheGate($ability, $users);
+        return $this->userRepository->filterViewableUsers($users);
     }
 
     public function paginateUsers($users, $perPage = 10)

@@ -24,6 +24,8 @@ class PostController extends Controller
     {
         $posts = $this->postService->getAllPostsWithQueryString();
 
+        $this->authorize('view', $posts->first());
+
         $paginated = $this->postService->paginatePosts($posts);
 
         return view('admin.posts.all', ['posts' => $paginated]);
