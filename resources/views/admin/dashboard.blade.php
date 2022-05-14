@@ -18,11 +18,11 @@
                             <a href="{{ route('admin.posts.index') }}" class="btn d-block p-5 bg-success-gradient">مشاهده همه پست ها</a>
                         </div>
                     @endcan
-                    @if (auth()->user()->can('view', \App\Models\User::class) || auth()->user()->can('viewAdmin', App\Models\User::first()) )
+                    @can('viewAny', \App\Models\User::class)
                         <div class="col-6">
                             <a href="{{ route('admin.users.index') }}" class="btn d-block p-5 bg-info-gradient">مدیریت کاربران</a>
                         </div>
-                    @endif
+                    @endcan
                 </div>
             </div>
 

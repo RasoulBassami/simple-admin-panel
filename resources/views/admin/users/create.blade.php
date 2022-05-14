@@ -63,30 +63,37 @@
                             <input type="password" name="password_confirmation" class="form-control" id="inputPasswordConfirm" placeholder="پسورد را وارد کنید">
                         </div>
                     </div>
-                    <div class="form-group">
-                        <div class="col-sm-offset-2 col-sm-10">
-                            <div class="form-check">
-                                <label for="adminCheck">
-                                    <input type="checkbox" name="is_admin" class="form-check-input" id="adminCheck">
-                                    کاربر ادمین باشد
-                                </label>
-                            </div>
-                        </div>
-                    </div>
 
-                    <div class="form-group mt-2">
-                        <label><strong>دسترسی های ادمین</strong></label><br>
-                        <div class="row" id="permission-selection">
-                            @foreach($admin_permissions as $permission)
-                                <div class="col-md-3 col-12 px-2 mb-2">
-                                    <label class="form-check-label">
-                                        <input type="checkbox" name="permission[]" class="ml-1" value="{{ $permission->id }}">
-                                        {{ $permission->label }}
+                    @can('createAdmin', \App\Models\User::class)
+                        @can('create', \App\Models\User::class)
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <div class="form-check">
+                                    <label for="adminCheck">
+                                        <input type="checkbox" name="is_admin" class="form-check-input" id="adminCheck">
+                                        کاربر ادمین باشد
                                     </label>
                                 </div>
-                            @endforeach
+                            </div>
                         </div>
-                    </div>
+                        @else
+                            <input type="hidden" name="is_admin" value="on">
+                        @endcan
+
+                        <div class="form-group mt-2">
+                            <label><strong>دسترسی های ادمین</strong></label><br>
+                            <div class="row" id="permission-selection">
+                                @foreach($admin_permissions as $permission)
+                                    <div class="col-md-3 col-12 px-2 mb-2">
+                                        <label class="form-check-label">
+                                            <input type="checkbox" name="permission[]" class="ml-1" value="{{ $permission->id }}">
+                                            {{ $permission->label }}
+                                        </label>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    @endcan
 
                 </div>
                 <!-- /.card-body -->

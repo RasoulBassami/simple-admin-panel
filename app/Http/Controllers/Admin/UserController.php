@@ -22,10 +22,9 @@ class UserController extends Controller
      */
     public function index()
     {
-        $view_user = Gate::inspect('view', User::class);
-        $view_admin = Gate::inspect('viewAdmin', User::first());
+        $view_user = Gate::inspect('viewAny', User::class);
 
-        if ($view_user->allowed() || $view_admin->allowed()) {
+        if ($view_user->allowed()) {
 
             $users = $this->userService->getAllUsersWithQueryString();
 
@@ -35,11 +34,10 @@ class UserController extends Controller
             $paginated = $this->userService->paginateUsers($filtered);
 
             return view('admin.users.all', ['users' => $paginated]);
-
         }
 
         alert()->error('شما به این بخش دسترسی ندارید.', 'خطای دسترسی')->persistent('بسیار خب');
-        return redirect('admin.dashboard');
+        return redirect(route('admin.dashboard'));
     }
 
     /**
@@ -55,7 +53,8 @@ class UserController extends Controller
             return view('admin.users.create', compact('admin_permissions'));
         }
 
-        return view('admin.dashboard')->withError('شما به این بخش دسترسی ندارید');
+        alert()->error('شما دسترسی لازم برای ایجاد کاربر جدید را ندارید!', 'خطای دسترسی')->persistent('متوجه شدم');
+        return redirect(route('admin.dashboard'));
     }
 
     /**
@@ -68,6 +67,8 @@ class UserController extends Controller
         if ($request->has('is_admin')) {
             $this->authorize('createAdmin', User::class);
             $request['is_admin'] = 1;
+        } else {
+            $this->authorize('create', User::class);
         }
 
         $this->userService->storeUser($request->all());

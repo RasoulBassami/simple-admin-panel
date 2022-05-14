@@ -19,9 +19,9 @@
                                 </div>
                             </div>
                         </form>
-                        @can('create', \App\Models\User::class)
+                        @canany(['create', 'createAdmin'], \App\Models\User::class)
                             <a class="btn btn-sm btn-primary mr-2" href="{{ route('admin.users.create') }}">ایجاد کاربر جدید</a>
-                        @endcan
+                        @endcanany
                         @can('viewAdmin', auth()->user(), \App\Models\User::class)
                             <a class="btn btn-sm btn-dark mr-2" href="{{ request()->fullUrlWithQuery(['admin' => 1]) }}">کاربران ادمین</a>
                         @endcan

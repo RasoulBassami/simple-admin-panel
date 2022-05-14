@@ -33,16 +33,16 @@
                     </li>
                     @endcan
 
-                    @if (auth()->user()->can('view', \App\Models\User::class) || auth()->user()->can('viewAdmin', App\Models\User::first()) )
+                    @can('viewAny', \App\Models\User::class)
                     <li class="nav-item">
                         <a href="{{ route('admin.users.index') }}" class="nav-link">
                             <i class="nav-icon fa fa-users"></i>
                             <p>
-                                فهرست کاربران
+                                مدیریت کاربران
                             </p>
                         </a>
                     </li>
-                    @endif
+                    @endcan
 
                 </ul>
             </nav>

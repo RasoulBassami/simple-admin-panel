@@ -73,6 +73,13 @@ class UserPolicy
             : Response::deny('شما به این بخش دسترسی ندارید');
     }
 
+    public function viewAny(User $user)
+    {
+        return !!($user->hasPermission('view-admin-users') || $user->hasPermission('view-users'))
+            ? Response::allow()
+            : Response::deny('شما به این بخش دسترسی ندارید');
+    }
+
     /**
      * Determine whether the user can create models.
      *
