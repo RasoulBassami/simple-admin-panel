@@ -19,8 +19,22 @@ class PostPolicy
      */
     public function view(User $user, Post $post)
     {
+        if ($user->isAdmin())
+            return !! $user->hasPermission('view-posts');
+
+        return !!($user->id == $post->user_id);
+    }
+
+    /**
+     * Determine whether the user can view the model.
+     *
+     * @param  \App\Models\User  $user
+     * @return mixed
+     */
+    public function viewAny(User $user)
+    {
         if ($user->hasPermission('view-posts'))
-            return !!($user->isAdmin() || $user->id == $post->user_id);
+            return !!($user->isAdmin() || $user->hasPost());
 
         return false;
     }
@@ -33,10 +47,7 @@ class PostPolicy
      */
     public function create(User $user)
     {
-        if ($user->hasPermission('create-post'))
-            return $user->isAdmin() ? false : true;
-
-        return false;
+        return $user->isAdmin() ? false : true;
     }
 
     /**
@@ -48,10 +59,10 @@ class PostPolicy
      */
     public function update(User $user, Post $post)
     {
-        if ($user->hasPermission('update-post'))
-            return !!($user->isAdmin() || $user->id == $post->user_id);
+        if ($user->isAdmin())
+            return !! $user->hasPermission('update-posts');
 
-        return false;
+        return !!($user->id == $post->user_id);
     }
 
     /**
@@ -63,9 +74,10 @@ class PostPolicy
      */
     public function delete(User $user, Post $post)
     {
-        if ($user->hasPermission('delete-post'))
-            return !!($user->isAdmin() || $user->id == $post->user_id);
+        if ($user->isAdmin())
+            return !! $user->hasPermission('delete-posts');
 
-        return false;
+        return !!($user->id == $post->user_id);
+
     }
 }

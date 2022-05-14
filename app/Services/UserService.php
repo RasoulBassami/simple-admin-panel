@@ -60,7 +60,7 @@ class UserService
             $this->permissionRepository->update($user, $user_data['permission']);
         } else {
             $user_data['is_admin'] = 0;
-            $this->permissionRepository->removeAdminPermissions($user);
+            $this->permissionRepository->removeAllPermissions($user);
         }
 
         if ($request->has('password'))

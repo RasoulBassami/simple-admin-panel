@@ -24,7 +24,7 @@ class PostController extends Controller
     {
         $posts = $this->postService->getAllPostsWithQueryString();
 
-        $this->authorize('view', $posts->first());
+        $this->authorize('viewAny', Post::class);
 
         $paginated = $this->postService->paginatePosts($posts);
 
@@ -37,7 +37,8 @@ class PostController extends Controller
     public function edit(Post $post)
     {
         if(Gate::denies('update', $post)) {
-            return view('admin.dashboard')->withError('شما به این بخش دسترسی ندارید!');
+            alert()->error('شما دسترسی لازم برای ویرایش این پست را ندارید!', 'خطای دسترسی')->persistent('بسیار خب');
+            return redirect(route('admin.dashboard'));
         }
 
         $images = $post->images;
@@ -50,7 +51,8 @@ class PostController extends Controller
     public function update(UpdatePostRequest $request, Post $post)
     {
         if(Gate::denies('update', $post)) {
-            return view('admin.dashboard')->withError('شما به این بخش دسترسی ندارید!');
+            alert()->error('شما دسترسی لازم برای ویرایش این پست را ندارید!', 'خطای دسترسی')->persistent('بسیار خب');
+            return redirect(route('admin.dashboard'));
         }
 
         $request['is_active'] = $request->has('active') ? 1 : 0;
@@ -67,7 +69,8 @@ class PostController extends Controller
     public function destroy(Post $post)
     {
         if(Gate::denies('delete', $post)) {
-            return view('admin.dashboard')->withError('شما به این بخش دسترسی ندارید!');
+            alert()->error('شما دسترسی لازم برای حذف این پست را ندارید!', 'خطای دسترسی')->persistent('بسیار خب');
+            return redirect(route('admin.dashboard'));
         }
 
         $this->postService->removePost($post);

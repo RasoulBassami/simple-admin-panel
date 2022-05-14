@@ -11,9 +11,9 @@
                 <h3 class="card-title"><h2>{{ auth()->user()->username }} خوش آمدید!</h2></h3>
             </div>
             <!-- /.card-header -->
-            <div class="card-body">
-                <div class="row col-md-8 offset-2">
-                    @can('view', \App\Models\Post::first())
+            <div class="card-body d-flex justify-content-center">
+                <div class="row col-md-8 d-flex justify-content-center">
+                    @can('viewAny', \App\Models\Post::class)
                         <div class="col-6">
                             <a href="{{ route('admin.posts.index') }}" class="btn d-block p-5 bg-success-gradient">مشاهده همه پست ها</a>
                         </div>

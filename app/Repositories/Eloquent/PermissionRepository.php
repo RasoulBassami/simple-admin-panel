@@ -21,22 +21,6 @@ class PermissionRepository extends BaseRepository implements PermissionRepositor
         return $this->model->where('name', '!=' , 'create-post')->get();
     }
 
-    public function normalUserPermissionsIds()
-    {
-        $default_user_permissions = array(
-            'create-post',
-            'view-posts',
-            'update-post',
-            'delete-post',
-        );
-        return $this->model->whereIn('name', $default_user_permissions)->pluck('id');
-    }
-
-    public function whereIn($ids)
-    {
-        return $this->model->whereIn('id', $ids)->get();
-    }
-
     public function store(User $user, $data)
     {
         $user->permissions()->sync($data);
@@ -45,13 +29,6 @@ class PermissionRepository extends BaseRepository implements PermissionRepositor
     public function update(User $user, $permissions)
     {
         $user->permissions()->sync($permissions);
-        $user->touch();
-    }
-
-    public function removeAdminPermissions(User $user)
-    {
-        $normal_user_permissions_ids = $this->normalUserPermissionsIds();
-        $user->permissions()->sync($normal_user_permissions_ids);
         $user->touch();
     }
 

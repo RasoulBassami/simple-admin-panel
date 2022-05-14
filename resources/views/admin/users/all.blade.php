@@ -48,11 +48,11 @@
                                                 <form method="post" action="{{ route('admin.users.destroy', ['user' => $user->id])}}">
                                                     @csrf
                                                     @method('delete')
-                                                    <button type="submit" class="btn btn-danger btn-sm">حذف</button>
+                                                    <button type="submit" class="btn btn-danger btn-sm ml-1">حذف</button>
                                                 </form>
                                             @endcan
                                             @can('updateAdmin', $user)
-                                                <a href="{{ route('admin.users.edit' , ['user' => $user->id]) }}" class="btn btn-sm btn-primary mr-1">ویرایش</a>
+                                                <a href="{{ route('admin.users.edit' , ['user' => $user->id]) }}" class="btn btn-sm btn-primary">ویرایش</a>
                                             @endcan
                                         </td>
                                     </tr>
