@@ -96,10 +96,11 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
 
     public function delete($user)
     {
-        $deleted_title = $user->title . '_deleted_' . $user->id;
+        $deleted_username = $user->username . '_deleted_' . $user->id;
         $user->update([
-            'title' => $deleted_title
+            'username' => $deleted_username
         ]);
+
         $user->delete($user);
     }
 }

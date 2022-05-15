@@ -93,4 +93,11 @@ class PostRepository extends BaseRepository implements PostRepositoryInterface
         ]);
         $post->delete($post);
     }
+
+    public function deleteMany($posts)
+    {
+        foreach ($posts as $post) {
+            $this->delete($post);
+        }
+    }
 }

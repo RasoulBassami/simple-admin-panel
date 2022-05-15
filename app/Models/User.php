@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use Iatstuti\Database\Support\CascadeSoftDeletes;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    use Notifiable;
+    use Notifiable, SoftDeletes, CascadeSoftDeletes;
 
     public $timestamps = false;
 
@@ -20,6 +22,8 @@ class User extends Authenticatable
         'name','username', 'password', 'is_admin',
     ];
 
+    protected $cascadeDeletes = ['permissions'];
+    protected $dates = ['deleted_at'];
     /**
      * The attributes that should be hidden for arrays.
      *

@@ -60,7 +60,7 @@ class PostPolicy
     public function update(User $user, Post $post)
     {
         if ($user->isAdmin())
-            return !! $user->hasPermission('update-posts');
+            return !! $user->hasPermission('update-post');
 
         return !!($user->id == $post->user_id);
     }
@@ -75,9 +75,8 @@ class PostPolicy
     public function delete(User $user, Post $post)
     {
         if ($user->isAdmin())
-            return !! $user->hasPermission('delete-posts');
+            return !! $user->hasPermission('delete-post');
 
         return !!($user->id == $post->user_id);
-
     }
 }

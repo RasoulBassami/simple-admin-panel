@@ -15,4 +15,6 @@ interface PostRepositoryInterface
     public function update($post, $data);
 
     public function delete($post);
+
+    public function deleteMany($posts);
 }

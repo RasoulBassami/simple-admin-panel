@@ -3,18 +3,20 @@ namespace App\Services;
 
 use App\Models\User;
 use App\Repositories\PermissionRepositoryInterface;
+use App\Repositories\PostRepositoryInterface;
 use App\Repositories\UserRepositoryInterface;
 
 class UserService
 {
     protected $userRepository;
     protected $permissionRepository;
+    protected $postRepository;
 
-
-    public function __construct(UserRepositoryInterface $userRepository, PermissionRepositoryInterface $permissionRepository)
+    public function __construct(UserRepositoryInterface $userRepository, PermissionRepositoryInterface $permissionRepository, PostRepositoryInterface $postRepository)
     {
         $this->userRepository = $userRepository;
         $this->permissionRepository = $permissionRepository;
+        $this->postRepository = $postRepository;
     }
 
     public function getAllUsersWithQueryString()
@@ -72,6 +74,12 @@ class UserService
     public function removeUser(User $user)
     {
         $this->permissionRepository->removeAllPermissions($user);
+
+        if($user->hasPost()) {
+            $posts = $user->posts;
+            $this->postRepository->deleteMany($posts);
+        }
+
         $this->userRepository->delete($user);
     }
 }
