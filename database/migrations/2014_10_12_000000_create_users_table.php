@@ -19,7 +19,6 @@ class CreateUsersTable extends Migration
             $table->string('username')->unique();
             $table->string('password');
             $table->boolean('is_admin')->default(0);
-            $table->softDeletes();
             $table->rememberToken();
         });
     }
